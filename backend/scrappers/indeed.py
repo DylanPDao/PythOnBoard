@@ -1,8 +1,6 @@
-import asyncio
-import urllib.parse
-from search_utils import launch_browser, open_page, wait_for_element, close_playwright, extract_job_listings
+from scrappers.search_utils import launch_browser, open_page, wait_for_element, close_playwright, extract_job_listings
 
-async def scrape_indeed(url, job_name, location):
+async def scrape_indeed(url):
 
     # Define selectors for job listings on Indeed
     job_container_selector = '.resultContent'
@@ -34,19 +32,3 @@ async def scrape_indeed(url, job_name, location):
         await close_playwright(playwright)
     
     return jobs
-
-if __name__ == "__main__":
-    job_name = "Software Developer"
-    location = "92843"
-
-    # URL encode job name and location to handle spaces and special characters
-    encoded_job_name = urllib.parse.quote_plus(job_name)
-    encoded_location = urllib.parse.quote_plus(location)
-
-    # Construct the URL dynamically
-    job_url = f"https://www.indeed.com/jobs?q={encoded_job_name}&l={encoded_location}&fromage=1"
-
-    jobs = asyncio.run(scrape_indeed(job_url, job_name, location))
-    print(jobs)
-
-#xvfb-run python indeed.py

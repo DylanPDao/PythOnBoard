@@ -31,3 +31,38 @@ async def open_page(browser, url):
 # Wait for an element to appear
 async def wait_for_element(selector, page):
     await page.wait_for_selector(selector, timeout=60000, state="visible")  # 60 seconds timeout, ensure element is visible
+
+
+#grab listings
+async def extract_job_listings(page, job_container_selector, title_selector, company_selector, location_selector, url_selector):
+    jobs = []
+    
+    # Grab all job listings
+    job_listings = await page.query_selector_all(job_container_selector)
+    
+    for job in job_listings:
+        # Extract the job title
+        title_element = await job.query_selector(title_selector)
+        title = await page.evaluate('(element) => element ? element.textContent : ""', title_element)
+
+        # Extract the company name
+        company_element = await job.query_selector(company_selector)
+        company = await page.evaluate('(element) => element ? element.textContent : ""', company_element)
+
+        # Extract the location
+        location_element = await job.query_selector(location_selector)
+        job_location = await page.evaluate('(element) => element ? element.textContent : ""', location_element)
+
+        # Extract the job URL
+        url_element = await job.query_selector(url_selector)
+        url = await page.evaluate('(element) => element ? element.href : ""', url_element)
+
+        # Append job details to the jobs list
+        jobs.append({
+            "title": title,
+            "company": company,
+            "location": job_location,
+            "url": url  
+        })
+
+    return jobs

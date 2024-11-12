@@ -1,5 +1,6 @@
 import asyncio
-from search_utils import launch_browser, open_page, wait_for_element, type_into_element, click_element, close_playwright, click_dropdown
+import urllib.parse
+from search_utils import launch_browser, open_page, wait_for_element, close_playwright
 
 async def scrape_indeed(url, job_name, location):
 
@@ -10,20 +11,6 @@ async def scrape_indeed(url, job_name, location):
     try:
         # Go to specific page
         page = await open_page(browser, url)
-
-        # Wait for search boxes to open
-        await wait_for_element('#text-input-what', page)
-        await wait_for_element('#text-input-where', page)
-
-        # Type into search boxes
-        await type_into_element('#text-input-what', job_name, page)
-        await type_into_element('#text-input-where', location, page)
-
-        # Hit submit
-        await click_element('button[type="submit"]', page)
-
-        #filter to last 24 hours    
-        await click_dropdown(page, '#filter-dateposted','.yosegi-FilterPill-dropdownPillContainer', 'a:has-text("Last 24 hours")')
 
         # Wait for job listings to load
         await wait_for_element('.resultContent', page)
@@ -66,8 +53,15 @@ async def scrape_indeed(url, job_name, location):
     return jobs
 
 if __name__ == "__main__":
-    job_url = "https://www.indeed.com"
     job_name = "Software Developer"
     location = "92843"
+
+    # URL encode job name and location to handle spaces and special characters
+    encoded_job_name = urllib.parse.quote_plus(job_name)
+    encoded_location = urllib.parse.quote_plus(location)
+
+    # Construct the URL dynamically
+    job_url = f"https://www.indeed.com/jobs?q={encoded_job_name}&l={encoded_location}&fromage=1"
+
     jobs = asyncio.run(scrape_indeed(job_url, job_name, location))
     print(jobs)

@@ -18,6 +18,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Define a root route
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the FastAPI backend!"}
+
+
+#indeed listings
 @app.get("/indeed_jobs")
 async def get_jobs(job_name: str, location: str):
     # URL encode job name and location to handle spaces and special characters
@@ -25,7 +32,7 @@ async def get_jobs(job_name: str, location: str):
     encoded_location = urllib.parse.quote_plus(location)
 
     # Construct the URL dynamically
-    job_url = f"https://www.indeed.com/jobs?q={encoded_job_name}&l={encoded_location}&fromage=1"
+    job_url = f"https://www.indeed.com/jobs?q={encoded_job_name}&l={encoded_location}&radius=50&fromage=1"
 
     # Call the scrape_indeed function and get job listings
     jobs = await scrape_indeed(job_url)

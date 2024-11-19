@@ -3,8 +3,20 @@ import asyncio
 import urllib.parse
 from fastapi import FastAPI
 from scrappers.indeed import scrape_indeed
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# Set up CORS to allow requests from the Next.js frontend
+origins = ["http://localhost:3000"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/indeed_jobs")
 async def get_jobs(job_name: str, location: str):

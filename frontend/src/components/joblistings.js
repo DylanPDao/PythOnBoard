@@ -48,24 +48,24 @@ const JobListings = () => {
     return (
         <div>
             <h1>Job Listings</h1>
-            <ul>
+            <ul className="flex justify-center items-center flex-wrap">
                 {jobs.map((job, index) => (
-                    <li key={index}>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>{job.title}</CardTitle>
-                            <CardDescription>{job.title}</CardDescription>
-                        </CardHeader>
-                    </Card>
-                    <CardContent>
-                        <p>Content</p>   
-                    </CardContent>
-                    <CardFooter>
-                        <p>{job.location}</p>
-                        <Button asChild>
-                            <Link href={job.url}>View</Link>
-                        </Button>
-                    </CardFooter>
+                    <li key={index} className="w-1/4 p-4">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{job.title}</CardTitle>
+                                <CardDescription>{job.title}</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p>Content</p>   
+                            </CardContent>
+                            <CardFooter className="flex justify-between">
+                                <p>{job.location}</p>
+                                <Button asChild>
+                                    <Link href={job.url}>View</Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
                     </li>
                 ))}
             </ul>

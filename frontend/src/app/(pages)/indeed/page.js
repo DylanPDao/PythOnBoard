@@ -1,6 +1,6 @@
 // src/pages/index.js
 import React from 'react';
-import JobListings from '../../../components/joblistings';
+import JobListings from '../../../components/JobListings';
 
 const HomePage = () => {
     return (
